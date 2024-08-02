@@ -1,0 +1,28 @@
+<!-- lecture.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lecture Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Frontend Lecture Page</h1>
+
+    <div id="lectureList">
+      <!-- Lecture list will be populated here -->
+    </div>
+
+    <script>
+      $(document).ready(function () {
+        $.ajax({
+          url: "/lectures/", // URL mapped to the backend view fetching lectures
+          success: function (data) {
+            $("#lectureList").html(data); // Update the #lectureList div with fetched data
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

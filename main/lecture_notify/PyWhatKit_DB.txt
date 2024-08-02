@@ -1,0 +1,10 @@
+Date: 21/6/2024
+Time: 19:51
+Phone Number: +2349162220402
+Message: This is a test message from pywhatkit.
+--------------------
+Date: 21/6/2024
+Time: 21:58
+Phone Number: +2349162220402
+Message: This is a test message from pywhatkit.
+--------------------
