@@ -8,12 +8,17 @@ class Faculty(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = "faculties"
+        verbose_name = "Faculty"
+        verbose_name_plural = "Faculties"
 
 class Department(models.Model):
     name = models.CharField(max_length=100)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, related_name='departments')
     description = models.TextField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Department"
+        verbose_name_plural = "Departments"
 
     def __str__(self):
         return self.name
@@ -26,6 +31,9 @@ class Course(models.Model):
     lecturer = models.ForeignKey('Lecturer', on_delete=models.CASCADE, related_name='courses', null=True, blank=True)
     description = models.TextField(blank=True, null=True)
 
+    class Meta:
+        verbose_name = "Course"
+        
     def __str__(self):
         return self.course_title
 
@@ -37,6 +45,11 @@ class Lecturer(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lecturers', null=True, blank=True)
     phone_number = models.CharField(max_length=15, null=True, blank=True)
 
+    class Meta:
+        verbose_name = "Lecturer"  # Capitalize the display name
+        verbose_name_plural = "Lecturers"  # Capitalize the plural display name (optional)
+ 
+
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -45,6 +58,10 @@ class Semester(models.Model):
     name = models.CharField(max_length=50)
     start_date = models.DateField()
     end_date = models.DateField()
+
+    class Meta:
+        verbose_name = "Semester"
+        verbose_name_plural = "Semesters"
 
     def __str__(self):
         return self.name
@@ -57,6 +74,11 @@ class Lecture(models.Model):
     date = models.DateField()
     time = models.TimeField()
 
+    class Meta:
+        verbose_name = "Lecture"  # Capitalize the display name
+        verbose_name_plural = "Lectures"  # Capitalize the plural display name (optional)
+
+
     def __str__(self):
         return self.course_title
 
@@ -67,6 +89,11 @@ class Student(models.Model):
     student_id = models.CharField(max_length=20, unique=True, default='1')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='students', null=True, blank=True)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Student"  # Capitalize the display name
+        verbose_name_plural = "Students"  # Capitalize the plural display name (optional)
+
 
     def __str__(self):
         return self.name

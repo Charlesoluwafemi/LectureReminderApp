@@ -59,16 +59,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lecture_notify.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'LECTURESNotify',
-        'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
-        'PORT': '5432',
+import os
+import dj_database_url
 
-    },
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=f"postgres://{os.environ.get('POSTGRES_USER', 'postgres')}:{os.environ.get('POSTGRES_PASSWORD', '1234')}@{os.environ.get('POSTGRES_HOST', 'localhost')}:{os.environ.get('POSTGRES_PORT', '5432')}/{os.environ.get('POSTGRES_DB', 'LECTURESNotify')}"
+    ),
     'celery': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'celery_db',
@@ -77,10 +75,10 @@ DATABASES = {
         'HOST': '',
         'PORT': '',
     }
+}
 
     
-    
-}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

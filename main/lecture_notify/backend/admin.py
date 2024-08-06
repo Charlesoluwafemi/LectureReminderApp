@@ -1,6 +1,10 @@
 from django.contrib import admin
 from .models import Faculty, Department, Lecturer, Course, Semester, Student, Lecture
 
+
+admin.site.site_header = " Lecture Notify"
+
+
 @admin.register(Faculty)
 class FacultyAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
