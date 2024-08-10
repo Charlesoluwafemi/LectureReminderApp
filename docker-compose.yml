@@ -1,42 +1,57 @@
-
+version: '3.8'
 
 services:
+  backend:
+    build: ./lecture_notify
+    command: ["./wait-for-it.sh", "db", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    volumes:
+      - ./lecture_notify:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:1234@db:5432/LECTURESNotify
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+    build: ./frontend
+    command: sh -c "npm run build && npm start"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
     depends_on:
       - backend
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000/api
-
-  backend:
-    build:
-      context: ./main/lecture_notify
-      dockerfile: Dockerfile
-    ports:
-      - "8000:8000"
-    environment:
-      - DEBUG=1
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1234
-      - POSTGRES_DB=LECTURESNotify
-      - POSTGRES_HOST=db
-      - POSTGRES_PORT=5432
-      - DATABASE_URL=postgres://postgres:1234@db:5432/LECTURESNotify
-    depends_on:
-      - db
+      NEXT_PUBLIC_JWT_SECRET: ${NEXT_PUBLIC_JWT_SECRET}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   db:
-    image: postgres:13
+    image: postgres:14-alpine
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
       POSTGRES_DB: LECTURESNotify
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
 volumes:
   postgres_data:

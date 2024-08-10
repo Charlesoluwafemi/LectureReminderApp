@@ -1,11 +1,10 @@
-// components/withAuth.js
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import jwt from 'jsonwebtoken';
 
 const withAuth = (WrappedComponent) => {
-  return (props) => {
+  const Wrapper = (props) => {
     const router = useRouter();
 
     useEffect(() => {
@@ -19,10 +18,19 @@ const withAuth = (WrappedComponent) => {
           router.push('/login');
         }
       }
-    }, []);
+    }, [router]); // Added `router` as a dependency
 
     return <WrappedComponent {...props} />;
   };
+
+  Wrapper.displayName = `withAuth(${getDisplayName(WrappedComponent)})`;
+
+  return Wrapper;
+};
+
+// Helper function to get the display name
+const getDisplayName = (WrappedComponent) => {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 };
 
 export default withAuth;
