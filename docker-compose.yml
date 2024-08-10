@@ -9,7 +9,8 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DATABASE_URL: postgresql://postgres:1234@db:5432/LECTURESNotify
     healthcheck:
@@ -49,8 +50,8 @@ services:
       POSTGRES_DB: LECTURESNotify
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 30s
-      timeout: 10s
+      interval: 5s
+      timeout: 5s
       retries: 5
 
 volumes:

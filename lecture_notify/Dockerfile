@@ -9,13 +9,13 @@ RUN pip install -r requirements.txt
 
 
 # Install PostgreSQL client tools
-RUN apt-get update && apt-get install -y postgresql-client
+RUN apt-get update && apt-get install -y postgresql-client netcat-openbsd
 
 COPY . /app/
 
 COPY wait-for-it.sh .
 
-RUN chmod +x wait-for-it.sh
+RUN chmod +x ./wait-for-it.sh
 
 
 
